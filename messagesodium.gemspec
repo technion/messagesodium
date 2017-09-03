@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Technion"]
   spec.email         = ["technion@lolware.net"]
 
-  spec.summary       = %q{rite a short summary, because Rubygems requires one.}
+  spec.summary       = %q{Patches Cookiestore to use Libsodium for encryption and verification.}
   spec.description   = %q{Write a longer description or delete this line.}
-  spec.homepage      = "https://github.com"
+  spec.homepage      = "https://github.com/technion/messagesodium"
   spec.license       = "MIT"
 
   if spec.respond_to?(:metadata)
