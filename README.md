@@ -16,8 +16,10 @@ This gem brings an alternative backend to CookieStore.
 
 ```
 
-Cookiestore data is: SWFQbTg0dCtheE45TXU0dWRtT25ndjJVSEdWTE8vei9LMVpZYWVjaWZjaFppdUk5aklVRWZEUy9TOUJuMFpYd2dDMndVZkt0eTR5Sm04Y1FjQzk0M00wRnhTRERHdDhnT3c1dTBvTnRad009LS16WlFaeE82dy84VzA4NThYQzk5bTVBPT0=--efcb8809421d2dc1665c9d9afa9638c1c2a763eb which is 222 in length
-Sodium data is: SGwQn0DD+pOvTPo68nvNYQLRFMt+Mf7rFU6BkiKhA0qHGT8BHVuqXRqEOYy+xcOoMCCRh99eeb/sVWlPzA4/FavTyg4U0PUAns0bx/Q9j4gcoD6K/h0z8yZvW0425g== which is 128 in length
+Cookiestore data is: SWFQbTg0dCtheE45TXU0dWRtT25ndjJVSEdWTE8vei9LMVpZYWVjaWZjaFppdUk5aklVRWZEUy9TOUJuMFpYd2dDMndVZkt0eTR5Sm04Y1FjQzk0M00wRnhTRERHdDhnT3c1dTBvTnRad009LS16WlFaeE82dy84VzA4NThYQzk5bTVBPT0=--efcb8809421d2dc1665c9d9afa9638c1c2a763eb
+which is 222 in length
+Sodium data is: SGwQn0DD+pOvTPo68nvNYQLRFMt+Mf7rFU6BkiKhA0qHGT8BHVuqXRqEOYy+xcOoMCCRh99eeb/sVWlPzA4/FavTyg4U0PUAns0bx/Q9j4gcoD6K/h0z8yZvW0425g==
+which is 128 in length
                                        user     system      total        real
 to_json                            2.470000   0.000000   2.470000 (  2.514048)
 JSON.dump                          0.520000   0.000000   0.520000 (  0.534084)
@@ -40,7 +42,7 @@ Smaller cookies are a good thing. It's less data on the wire for every single pa
 
 ## More performant
 
-The above benchmark shows our approach as much more performant. Some of that is pure crypto, as below.
+The above benchmark shows our approach as much more performant. Some of that is just crypto, which can be hardware dependant.
 
 But some of this is down to the message packing. Dipping into Base64 functions three separate times to open one cookie is ineffecient. When the IV is known to be of BLOCKSIZE length, choosing to cut it by using split() and a delimiter is the long way around. In the end, performance is great.
 

@@ -38,7 +38,7 @@ module ActiveSupport
 
     # Given a cipher, returns the key length of the cipher to help generate
     # the key of desired size
-    def self.key_len(_cipher)
+    def self.key_len(_cipher = nil)
       # Ignore the cipher - libsodium knows what it's doing.
       RbNaCl::SecretBox.key_bytes
     end
