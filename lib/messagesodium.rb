@@ -1,5 +1,6 @@
 require "base64"
 require "rbnacl/libsodium"
+require "json"
 
 # Based on existing class from: https://github.com/rails/rails/blob/0a6f69a5debf89748da3a43747c61d201095997e/activesupport/lib/active_support/message_encryptor.rb
 # Implements all methods documented per http://api.rubyonrails.org/classes/ActiveSupport/MessageEncryptor.html
@@ -26,7 +27,7 @@ module ActiveSupport
     # Serialise with JSON.dump
     # Returns base64(random nonce + cipher + auth tag)
     def encrypt_and_sign(value)
-      Base64.strict_encode64(@box.encrypt(JSON.dump(value)))
+      Base64.strict_encode64(@box.encrypt(::JSON.dump(value)))
     end
 
     # Decrypt the message, and check the auth tag in the process.
