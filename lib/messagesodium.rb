@@ -1,6 +1,6 @@
 require "base64"
 require "rbnacl/libsodium"
-require "json"
+require "json" # Using built-in JSON to avoid abysmal performance
 
 # Based on existing class from: https://github.com/rails/rails/blob/0a6f69a5debf89748da3a43747c61d201095997e/activesupport/lib/active_support/message_encryptor.rb
 # Implements all methods documented per http://api.rubyonrails.org/classes/ActiveSupport/MessageEncryptor.html
@@ -32,7 +32,7 @@ module ActiveSupport
 
     # Decrypt the message, and check the auth tag in the process.
     def decrypt_and_verify(value)
-      JSON.parse(@box.decrypt(Base64.decode64(value)), symbolize_names: true)
+      ::JSON.parse(@box.decrypt(Base64.decode64(value)), symbolize_names: true)
     rescue RbNaCl::CryptoError
       raise InvalidMessage
     end
