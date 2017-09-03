@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["technion@lolware.net"]
 
   spec.summary       = %q{Patches MessageEncryptor/Cookiestore to use Libsodium .}
-  spec.description   = %q{Write a longer description or delete this line.}
+  spec.description   = %q{Introduces modern crypto, higher performance, smaller cookies to your sessions.}
   spec.homepage      = "https://github.com/technion/messagesodium"
   spec.license       = "MIT"
 
