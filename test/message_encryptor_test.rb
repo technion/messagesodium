@@ -30,7 +30,10 @@ class MessageEncryptorTest < Minitest::Test
     brokenonce = brokeauth = brokemessage = cipher
     brokenonce[2] = (brokenonce[2].ord ^ 'a'.ord).chr
     brokeauth[-2] = (brokeauth[-2].ord ^ 'a'.ord).chr
-    brokemessage[20] = (brokemessage[20].ord ^ 'a'.ord).chr
+
+    # A location in the cipher text after the end of the nonce
+    msgbyte = RbNaCl::SecretBoxes::XSalsa20Poly1305.nonce_bytes + 4
+    brokemessage[msgbyte] = (brokemessage[msgbyte].ord ^ 'a'.ord).chr
 
     assert_not_verified(Base64.strict_encode64(brokenonce))
     assert_not_verified(Base64.strict_encode64(brokeauth))
@@ -40,11 +43,11 @@ class MessageEncryptorTest < Minitest::Test
   def test_backwards_compat_for_64_bytes_key
     # Actually, we won't support tiny keys
     # Test for an exception here
-    # 64 bit key
-    secret = ["3942b1bf81e622559ed509e3ff274a780784fe9e75b065866bd270438c74da822219de3156473cc27df1fd590e4baf68c95eeb537b6e4d4c5a10f41635b5597e"].pack("H*")
+    # 128 bit key
+    key = SecureRandom.random_bytes(16)
     # Encryptor with 32 bit key, 64 bit secret for verifier
     assert_raises RbNaCl::LengthError do
-      encryptor = ActiveSupport::MessageEncryptor.new(secret)
+      ActiveSupport::MessageEncryptor.new(key)
     end
   end
 
@@ -56,10 +59,10 @@ class MessageEncryptorTest < Minitest::Test
   end
 
   private
-    def assert_not_verified(value)
-      assert_raises ActiveSupport::MessageEncryptor::InvalidMessage do
-        @encryptor.decrypt_and_verify(value)
-      end
-    end
 
+  def assert_not_verified(value)
+    assert_raises ActiveSupport::MessageEncryptor::InvalidMessage do
+      @encryptor.decrypt_and_verify(value)
+    end
+  end
 end

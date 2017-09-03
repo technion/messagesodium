@@ -10,37 +10,37 @@ module ActiveSupport
   #
   # The cipher text and initialization vector are base64 encoded and returned
   # to you.
-  #
   class MessageEncryptor
     class InvalidMessage < StandardError; end
 
-    def initialize(secret, *signature_key_or_options)
-      # The options and signature fields are unused.
-      # However we need to retain them as they exist in the original function
+    # Uses "secret" as a libsodium Simplebox initialiser
+    # Secret must be 32 bytes (256-bit) long
+    # The options and signature fields are unused as lidsodium does not require
+    # a second key for an HMAC.
+    # However we need to retain them as they exist in the original function
+    def initialize(secret, *_signature_key_or_options)
       @box = RbNaCl::SimpleBox.from_secret_key(secret)
     end
 
-    # Encrypt and sign a message. We need to sign the message in order to avoid
-    # padding attacks. Reference: http://www.limited-entropy.com/padding-oracle-attacks.
+    # Encrypt and authenticate using libsodium XSalsa20/Poly1305
+    # Serialise with JSON.dump
+    # Returns base64(random nonce + cipher + auth tag)
     def encrypt_and_sign(value)
-      Base64.strict_encode64(@box.encrypt(value.to_json))
+      Base64.strict_encode64(@box.encrypt(JSON.dump(value)))
     end
 
-    # Decrypt and verify a message. We need to verify the message in order to
-    # avoid padding attacks. Reference: http://www.limited-entropy.com/padding-oracle-attacks.
+    # Decrypt the message, and check the auth tag in the process.
     def decrypt_and_verify(value)
-      begin
-        JSON.parse(@box.decrypt(Base64.decode64(value)), symbolize_names: true)
-      rescue RbNaCl::CryptoError
-        raise InvalidMessage
-      end
+      JSON.parse(@box.decrypt(Base64.decode64(value)), symbolize_names: true)
+    rescue RbNaCl::CryptoError
+      raise InvalidMessage
     end
 
-    # Given a cipher, returns the key length of the cipher to help generate the key of desired size
-    def self.key_len(cipher)
+    # Given a cipher, returns the key length of the cipher to help generate
+    # the key of desired size
+    def self.key_len(_cipher)
       # Ignore the cipher - libsodium knows what it's doing.
       RbNaCl::SecretBox.key_bytes
     end
   end
-
 end
