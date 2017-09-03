@@ -10,6 +10,15 @@ Rails [Cookiestore](https://www.justinweiss.com/articles/how-rails-sessions-work
 
 This gem brings an alternative backend to CookieStore.
 
+# Use
+
+Just insert this gem into your Gemfile like any other:
+
+    gem 'messagesodium'
+
+And run your usual bundle installation. Any existing sessions will be invalidated, much like if you changed your secret key.
+You can test it is active by looking at any session cookie. The absence of the "--" delimeter will confirm you are using this gem.
+
 # Demonstration
 
 [This gist](https://gist.github.com/technion/5cb2c6fbc570f6c1bc66e30bfb072cdf) shows a few interesting benchmarks, which we can refer to when describing what this gem offers.
