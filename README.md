@@ -1,4 +1,5 @@
 # Messagesodium
 
 Project status: Turbo Pre-alpha
-Doesn't work.
+
+Patches Cookiestore to use libsodium for encryption and verification.
