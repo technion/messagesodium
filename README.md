@@ -1,12 +1,12 @@
 # Messagesodium
 
-Project status: Turbo Pre-alpha
+Project status: 1.0 Release candidate
 
 Patches Cookiestore to use libsodium for encryption and verification.
 
 # Cookistore
 
-Rails [Cookiestore](https://www.justinweiss.com/articles/how-rails-sessions-work/) is a heavily underrated feature. It bought commonsense to session management at a time when [saving every user session in its own tmpfile on a server](http://php.net/manual/en/function.session-start.php) was slow and unreasonable to scale, and XXX.
+Rails [Cookiestore](https://www.justinweiss.com/articles/how-rails-sessions-work/) is a heavily underrated feature. It bought commonsense to session management at a time when [saving every user session in its own tmpfile on a server](http://php.net/manual/en/function.session-start.php) was slow and unreasonable to scale. And finally it avoided by default the horrible security issues we've seen with directly storing session variables in a cookie.
 
 This gem brings an alternative backend to CookieStore.
 
@@ -65,7 +65,7 @@ What you'll find in this gem is a much smaller, more easily audited codebase wit
 
 # Approach
 
-This gem is designed largely as a drop-in replacement for MessageEncryptor, which in turn is used by CookieStore. In a defualt environment, Rails astracts away everything I say below.
+This gem is designed largely as a drop-in replacement for MessageEncryptor, which in turn is used by CookieStore. In a default environment, Rails astracts away everything I say below.
 
 MessageEncryptor takes a "secret", and a "signing secret", using them as two different secrets. Libsodium only needs a 256-bit secret.
 
