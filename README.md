@@ -3,6 +3,7 @@
 Project status: 1.0 Release candidate
 
 Patches Cookiestore to use libsodium for encryption and verification.
+[![Build Status](https://travis-ci.org/technion/messagesodium.svg?branch=master)](https://travis-ci.org/technion/messagesodium)
 
 # Cookistore
 
