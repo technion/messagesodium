@@ -35,9 +35,9 @@ class MessageEncryptorTest < Minitest::Test
     msgbyte = RbNaCl::SecretBoxes::XSalsa20Poly1305.nonce_bytes + 4
     brokemessage[msgbyte] = (brokemessage[msgbyte].ord ^ 'a'.ord).chr
 
-    assert_not_verified(Base64.strict_encode64(brokenonce))
-    assert_not_verified(Base64.strict_encode64(brokeauth))
-    assert_not_verified(Base64.strict_encode64(brokemessage))
+    assert_not_verified(Base64.urlsafe_encode64(brokenonce))
+    assert_not_verified(Base64.urlsafe_encode64(brokeauth))
+    assert_not_verified(Base64.urlsafe_encode64(brokemessage))
   end
 
   def test_backwards_compat_for_64_bytes_key
@@ -52,10 +52,12 @@ class MessageEncryptorTest < Minitest::Test
   end
 
   def test_message_obeys_strict_encoding
-    # These bas encoding characters should just get dropped
+    # These bas encoding characters should refuse to be decoded
     bad_encoding_characters = "\n!@#"
     message = @encryptor.encrypt_and_sign(@data) + bad_encoding_characters
-    assert_equal @data, @encryptor.decrypt_and_verify(message)
+    assert_raises ArgumentError do
+      @encryptor.decrypt_and_verify(message)
+    end
   end
 
   private

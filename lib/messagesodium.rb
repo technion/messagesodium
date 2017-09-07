@@ -25,13 +25,18 @@ module ActiveSupport
     # Encrypt and authenticate using libsodium XSalsa20/Poly1305
     # Serialise with JSON.dump
     # Returns base64(random nonce + cipher + auth tag)
+    # URLSafe encoding means it doesn't have to be mangled further to 
+    # become a cookie
     def encrypt_and_sign(value)
-      Base64.strict_encode64(@box.encrypt(::JSON.dump(value)))
+      Base64.urlsafe_encode64(@box.encrypt(::JSON.dump(value)))
     end
 
     # Decrypt the message, and check the auth tag in the process.
     def decrypt_and_verify(value)
-      ::JSON.parse(@box.decrypt(Base64.decode64(value)), symbolize_names: true)
+      ::JSON.parse(
+        @box.decrypt(
+          Base64.urlsafe_decode64(value)),
+        symbolize_names: true)
     rescue RbNaCl::CryptoError
       raise InvalidMessage
     end
