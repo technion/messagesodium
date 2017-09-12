@@ -1,6 +1,6 @@
 # Messagesodium
 
-Project status: 1.0 Release candidate
+Project status: Stable
 
 Patches Cookiestore to use libsodium for encryption and verification.
 [![Build Status](https://travis-ci.org/technion/messagesodium.svg?branch=master)](https://travis-ci.org/technion/messagesodium)
@@ -11,6 +11,10 @@ Rails [Cookiestore](https://www.justinweiss.com/articles/how-rails-sessions-work
 
 This gem brings an alternative backend to CookieStore.
 
+## Reason
+
+There are a series of benefits described below. None of these are highly compelling on their own, but I recommend considering the way these features add up.
+
 # Use
 
 Just insert this gem into your Gemfile like any other:
@@ -18,7 +22,7 @@ Just insert this gem into your Gemfile like any other:
     gem 'messagesodium'
 
 And run your usual bundle installation. Any existing sessions will be invalidated, much like if you changed your secret key.
-You can test it is active by looking at any session cookie. The absence of the "--" delimeter will confirm you are using this gem.
+You can test it is active by looking at any session cookie. The absence of the "--" delimiter will confirm you are using this gem.
 
 # Demonstration
 
@@ -52,7 +56,7 @@ Smaller cookies are a good thing. It's less data on the wire for every single pa
 
 ## More performant
 
-The above benchmark shows our approach as much more performant. Some of that is just crypto, which can be hardware dependant.
+The above benchmark shows our approach as much more performant. Some of that is just crypto, which can be hardware dependent.
 
 But some of this is down to the message packing. Dipping into Base64 functions three separate times to open one cookie is ineffecient. When the IV is known to be of BLOCKSIZE length, choosing to cut it by using split() and a delimiter is the long way around. In the end, performance is great.
 
@@ -60,7 +64,7 @@ But some of this is down to the message packing. Dipping into Base64 functions t
 
 Let's be clear about the fact that I have no known issue with the current CookieStore implementation. However, it's worth having a read of the view of [Google's Adam Langley](https://www.imperialviolet.org/2013/10/07/chacha20.html) when describing "a strong motivation to replace it" when describing CBC mode.
 
-Indeed, the are several comments in the original Rails source code to the effect of "this dance is done in the hope we don't introduce a vulnerability".
+Indeed, the are several comments in the original Rails source code to the effect of "this dance is done in the hope we don't introduce a vulnerability". In general, it would be argued that a thin layer of code on libsodium presents a higher quality product than a library over OpenSSL.
 
 What you'll find in this gem is a much smaller, more easily audited codebase without any hoops to jump through.
 
